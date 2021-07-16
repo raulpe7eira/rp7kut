@@ -2,7 +2,6 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import NextLink from 'next/link';
 
-const BASE_URL = 'http://alurakut.vercel.app/';
 const v = '1';
 
 
@@ -24,7 +23,7 @@ export function Rp7kutMenu({ githubUser }) {
   return (
     <Rp7kutMenu.Wrapper isMenuOpen={isMenuOpen}>
       <div className="container">
-        <Rp7kutMenu.Logo src={`${BASE_URL}/logo.svg`} />
+        <Rp7kutMenu.Logo src={`../../logo.svg`} />
 
         <nav style={{ flex: 1 }}>
           {[{ name: 'Inicio', slug: '/' }, { name: 'Amigos', slug: '/amigos' }, { name: 'Comunidades', slug: '/comunidades' }].map((menuItem) => (
@@ -44,8 +43,8 @@ export function Rp7kutMenu({ githubUser }) {
         </nav>
 
         <button onClick={() => setMenuState(!isMenuOpen)}>
-          {isMenuOpen && <img src={`${BASE_URL}/icons/menu-open.svg?v=${v}`} />}
-          {!isMenuOpen && <img src={`${BASE_URL}/icons/menu-closed.svg?v=${v}`} />}
+          {isMenuOpen && <img src={`../../icons/menu-open.svg?v=${v}`} />}
+          {!isMenuOpen && <img src={`../../icons/menu-closed.svg?v=${v}`} />}
         </button>
       </div>
       <Rp7kutMenuProfileSidebar githubUser={githubUser} />
@@ -143,7 +142,7 @@ Rp7kutMenu.Wrapper = styled.header`
       background: #5579A1;
       padding: 10px 42px;
       border: 0;
-      background-image: url(${`${BASE_URL}/icons/search.svg`});
+      background-image: url(${`../../icons/search.svg`});
       background-position: 15px center;
       background-repeat: no-repeat;
       border-radius: 1000px;
@@ -189,30 +188,30 @@ export function Rp7kutProfileSidebarMenuDefault() {
     <Rp7kutProfileSidebarMenuDefault.Wrapper>
       <nav>
         <a href="/">
-          <img src={`${BASE_URL}/icons/user.svg`} />
+          <img src={`../../icons/user.svg`} />
           Perfil
         </a>
         <a href="/">
-          <img src={`${BASE_URL}/icons/book.svg`} />
+          <img src={`../../icons/book.svg`} />
           Recados
         </a>
         <a href="/">
-          <img src={`${BASE_URL}/icons/camera.svg`} />
+          <img src={`../../icons/camera.svg`} />
           Fotos
         </a>
         <a href="/">
-          <img src={`${BASE_URL}/icons/sun.svg`} />
+          <img src={`../../icons/sun.svg`} />
           Depoimentos
         </a>
       </nav>
       <hr />
       <nav>
         <a href="/">
-          <img src={`${BASE_URL}/icons/plus.svg`} />
+          <img src={`../../icons/plus.svg`} />
           GitHub Trends
         </a>
         <a href="/logout">
-          <img src={`${BASE_URL}//icons/logout.svg`} />
+          <img src={`../../icons/logout.svg`} />
           Sair
         </a>
       </nav>
@@ -254,7 +253,7 @@ export function OrkutNostalgicIconSet(props) {
             {name}
           </span>
           <span className="OrkutNostalgicIconSet__number" style={{ gridArea: 'number' }}>
-            <img key={`orkut__icon_set__${slug}_img`} className="OrkutNostalgicIconSet__iconSample" src={`https://alurakut.vercel.app/icons/${icon}.svg`} />
+            <img key={`orkut__icon_set__${slug}_img`} className="OrkutNostalgicIconSet__iconSample" src={`../../icons/${icon}.svg`} />
             {props[slug] ? props[slug] : 0}
           </span>
         </li>
@@ -273,7 +272,7 @@ export function OrkutNostalgicIconSet(props) {
             <span className="OrkutNostalgicIconSet__iconComplex" className="OrkutNostalgicIconSet__number" style={{ gridArea: 'number' }}>
               {[0, 1, 2].map((_, index) => {
                 const isHeartActive = index <= (total - 1);
-                return <img key={`orkut__icon_set__${slug}_img_${index}`} src={`https://alurakut.vercel.app/icons/${icon}.svg`} style={{ marginRight: '2px', opacity: isHeartActive ? 1 : '0.5' }} />
+                return <img key={`orkut__icon_set__${slug}_img_${index}`} src={`../../icons/${icon}.svg`} style={{ marginRight: '2px', opacity: isHeartActive ? 1 : '0.5' }} />
               })}
             </span>
           </li>
