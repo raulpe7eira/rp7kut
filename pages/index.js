@@ -22,6 +22,28 @@ function ProfileSidebar(propriedades) {
   );
 }
 
+function ProfileRelationsBox(propriedades) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {propriedades.title} ({propriedades.items.length})
+      </h2>
+      <ul>
+        {propriedades.items.slice(0, 6).map((itemAtual) => {
+          return (
+            <li key={itemAtual.login}>
+              <a href={`https://github.com/${itemAtual.login}`}>
+                <img src={itemAtual.avatar_url} />
+                <span>{itemAtual.login}</span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  )
+}
+
 export default function Home() {
   const usuarioAleatorio = 'raulpe7eira';
   const [comunidades, setComunidades] = React.useState([{
@@ -30,13 +52,23 @@ export default function Home() {
     image: '../../capa-comunidade-01.jpg'
   }]);
   const pessoasFavoritas = [
-    'raulpe7eira',
-    'raulpe7eira',
-    'raulpe7eira',
-    'raulpe7eira',
-    'raulpe7eira',
-    'raulpe7eira'
+    'thiagogsr',
+    'eliasousa',
+    'davidsonfellipe',
+    'micheldoumit',
+    'josevalim',
+    'MarcusSky'
   ];
+  const [seguidores, setSeguidores] = React.useState([]);
+  React.useEffect(function () {
+    fetch('https://api.github.com/users/peas/followers')
+      .then(function (respostaDoServidor) {
+        return respostaDoServidor.json();
+      })
+      .then(function (respostaCompleta) {
+        setSeguidores(respostaCompleta);
+      })
+  }, [])
 
   return (
     <>
@@ -95,6 +127,7 @@ export default function Home() {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
               Comunidades ({comunidades.length})
