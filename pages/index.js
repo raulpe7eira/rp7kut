@@ -40,7 +40,7 @@ export default function Home() {
 
   return (
     <>
-      <Rp7kutMenu />
+      <Rp7kutMenu githubUser={usuarioAleatorio} />
       <MainGrid>
         {/* <Box style="grid-area: profileArea;"> */}
         <div className="profileArea" style={{ gridArea: 'profileArea' }}>
