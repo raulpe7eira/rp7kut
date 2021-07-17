@@ -1,4 +1,6 @@
 import React from 'react';
+import nookies from 'nookies';
+import jwt from 'jsonwebtoken';
 import MainGrid from '../src/components/MainGrid';
 import Box from '../src/components/Box';
 import { OrkutNostalgicIconSet, Rp7kutMenu, Rp7kutProfileSidebarMenuDefault } from '../src/lib/Rp7kutCommons';
@@ -44,16 +46,8 @@ function ProfileRelationsBox(propriedades) {
   )
 }
 
-export default function Home() {
-  const usuarioAleatorio = 'raulpe7eira';
-  const pessoasFavoritas = [
-    'thiagogsr',
-    'eliasousa',
-    'davidsonfellipe',
-    'micheldoumit',
-    'josevalim',
-    'MarcusSky'
-  ];
+export default function Home(props) {
+  const usuarioAleatorio = props.githubUser;
 
   const [seguidores, setSeguidores] = React.useState([]);
   React.useEffect(function () {
@@ -65,6 +59,7 @@ export default function Home() {
   }, [])
 
   const [comunidades, setComunidades] = React.useState([]);
+  const [requestLimitsExceededDataCMS, setRequestLimitsExceededDataCMS] = React.useState([]);
   const request = {
     method: 'POST',
     headers: {
@@ -86,8 +81,22 @@ export default function Home() {
   fetch('https://graphql.datocms.com/', request)
     .then((response) => response.json())
     .then((respostaCompleta) => {
-      setComunidades(respostaCompleta.data.allCommunities)
+      if (typeof respostaCompleta.errors !== "undefined") {
+        setRequestLimitsExceededDataCMS(true);
+      } else {
+        setRequestLimitsExceededDataCMS(false);
+        setComunidades(respostaCompleta.data.allCommunities);
+      }
     })
+
+  const [favoritos, setFavoritos] = React.useState([]);
+  React.useEffect(function () {
+    fetch('https://api.github.com/users/peas/following')
+      .then((respostaDoServidor) => respostaDoServidor.json())
+      .then((respostaCompleta) => {
+        setFavoritos(respostaCompleta);
+      })
+  }, [])
 
   return (
     <>
@@ -164,31 +173,37 @@ export default function Home() {
             <h2 className="smallTitle">
               Comunidades ({comunidades.length})
             </h2>
-            <ul>
-              {comunidades.map((itemAtual) => {
-                return (
-                  <li key={itemAtual.id}>
-                    <a href={`/communities/${itemAtual.id}`}>
-                      <img src={itemAtual.imageUrl} />
-                      <span>{itemAtual.title}</span>
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
+            {
+              requestLimitsExceededDataCMS
+                ? <p style={{ color: 'red' }}>DatoCMS requests limits exceeded</p>
+                : <ul>
+                  {
+                    comunidades.slice(0, 6).map((itemAtual) => {
+                      return (
+                        <li key={itemAtual.id}>
+                          <a href={`/communities/${itemAtual.id}`}>
+                            <img src={itemAtual.imageUrl} />
+                            <span>{itemAtual.title}</span>
+                          </a>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
+            }
           </ProfileRelationsBoxWrapper>
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
-              Pessoas da comunidade ({pessoasFavoritas.length})
+              Pessoas da comunidade ({favoritos.length})
             </h2>
 
             <ul>
-              {pessoasFavoritas.map((itemAtual) => {
+              {favoritos.slice(0, 6).map((itemAtual) => {
                 return (
-                  <li key={itemAtual}>
-                    <a href={`/users/${itemAtual}`}>
-                      <img src={`https://github.com/${itemAtual}.png`} />
-                      <span>{itemAtual}</span>
+                  <li key={itemAtual.id}>
+                    <a href={`/users/${itemAtual.login}`}>
+                      <img src={`${itemAtual.avatar_url}`} />
+                      <span>{itemAtual.login}</span>
                     </a>
                   </li>
                 )
@@ -199,4 +214,34 @@ export default function Home() {
       </MainGrid>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const baseUrl = isProd
+    ? 'https://rp7kut.vercel.app'
+    : 'http://localhost:3000';
+
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+  const request = { headers: { Authorization: token } };
+
+  var { isAuthenticated } = await fetch(`${baseUrl}/api/auth`, request)
+    .then((resposta) => resposta.json());
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+
+  const { githubUser } = jwt.decode(token);
+  return {
+    props: {
+      githubUser
+    }, // will be passed to the page component as props
+  };
 }
