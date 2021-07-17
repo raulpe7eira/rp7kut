@@ -1,4 +1,4 @@
-# Imersão React (3ª Edição) | rp7kut App
+# Imersão React (3ª Edição) | rp7kut
 
 This repository is the code corresponding to the [imersão react lab](https://www.alura.com.br/imersao-react).
 
