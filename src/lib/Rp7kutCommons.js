@@ -23,7 +23,7 @@ export function Rp7kutMenu({ githubUser }) {
   return (
     <Rp7kutMenu.Wrapper isMenuOpen={isMenuOpen}>
       <div className="container">
-        <Rp7kutMenu.Logo src={`../../logo.svg`} />
+        <Rp7kutMenu.Logo src={`../../logo.png`} />
 
         <nav style={{ flex: 1 }}>
           {[{ name: 'Inicio', slug: '/' }, { name: 'Amigos', slug: '/amigos' }, { name: 'Comunidades', slug: '/comunidades' }].map((menuItem) => (
@@ -377,7 +377,7 @@ const Rp7kutLoginScreen = css`
         }
       }
       img {
-        max-height: 45px;
+        max-height: 120px;
         margin-bottom: 36px;
       }
     }
