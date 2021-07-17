@@ -4,7 +4,7 @@ This repository is the code corresponding to the [imersão react lab](https://ww
 
 | LOGIN | HOME |
 |--|--|
-| <img src="./doc/login.png" height="300"> | <img src="./doc/home.png" height="300"> |
+| <img src="./doc/login.png" height="200"> | <img src="./doc/home.png" height="200"> |
 
 ## Installation
 
