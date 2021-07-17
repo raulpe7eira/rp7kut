@@ -32,7 +32,7 @@ npm run dev
 
 - [Vercel](https://vercel.com)
 
-## Fake Backend
+## Fake backend
 
 - [DatoCMS](https://datocms.com)
 
